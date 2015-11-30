@@ -6,24 +6,25 @@
     <link rel="stylesheet" type="text/css" href="app.css">
 </head>
 <body ng-app="myApp">
-<span class="list>
 <div id="container" ng-controller="MainController">
-        <div ng-controller="ListController"> {{title}}
-            <br>
-            <br>
-            <div ng-repeat="item in items">
-               <button class="btn" ng-click="selectItem(item)" ng-style={"background":item.selected?"red":"white"}> {{item.name}} </button>
-           </div>
-        </div>
-        <div ng-controller="DescController">
-            {{myService.cMsg.desc}}
-            <br>
-            <img ng-src={{myService.cMsg.pic}}>
-        </div>
-</span>
-<span>
-    test
-</span>
+    <span class="listRapper">
+            <div ng-controller="ListController"> {{title}}
+                <br>
+                <br>
+                <div ng-repeat="item in items">
+                   <button class="btn" ng-click="selectItem(item)" ng-style={"background":item.selected?"red":"white"}> {{item.name}} </button>
+               </div>
+            </div>
+    </span>
+    <span class="displayRapper">
+            <div ng-controller="DescController">
+                {{myService.cMsg.desc}}
+                <br>
+                <img ng-src={{myService.cMsg.pic}}>
+            </div>
+    </span>
+</div>
+
 <script src="angular/angular.js"></script>
 <script src="app.js"></script>
 </body>

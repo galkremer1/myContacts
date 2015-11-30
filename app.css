@@ -1,3 +1,14 @@
 .btn {
     width: 100px;
 }
+
+.listRapper {
+    margin: 20px;
+    display: inline-block;
+    padding: 10%;
+}
+
+.displayRapper {
+    margin: 0px;
+    display: inline-block;
+}
