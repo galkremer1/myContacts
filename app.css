@@ -6,12 +6,13 @@
     margin: 20px;
     display: inline-block;
     padding: 10%;
-    height: 400px;
+    float: left;
 }
 
 .displayRapper {
-    margin: 0px;
+    margin: 20px;
     display: inline-block;
+    padding-top: 10%;
 }
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
