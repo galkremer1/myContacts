@@ -3,16 +3,24 @@
 }
 
 .listRapper {
-    margin: 20px;
     display: inline-block;
     padding: 10%;
     float: left;
+    border-color: yellow;
+    border-style: dashed;
+    background-color: gray;
+    margin: auto;
+
 }
 
 .displayRapper {
-    margin: 20px;
     display: inline-block;
     padding-top: 10%;
+    padding-left: 10%;
+    width: 330px;
+    height: 280px;
+    margin: auto;
+    align-items: center;
 }
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
@@ -20,5 +28,37 @@
 }
 
 #container {
-    display: inline;
+    clear:left;
+    float:left;
+    width:70%;
+    height: auto;
+    overflow:hidden;
+    background:#ffa7a7;
+    border-color: black;
+    border-style: dashed;
+    display: inline-block;
 }
+
+.buttons {
+    margin: auto;
+}
+
+/*label{*/
+    /*display: inline-block;*/
+    /*float: left;*/
+    /*clear: left;*/
+    /*width: 250px;*/
+    /*text-align: right;*/
+/*}*/
+
+/*input {*/
+    /*display: inline-block;*/
+    /*float: left;*/
+/*}*/
+
+label {
+    display: inline-block;
+    width: 60px;
+    text-align: left;
+}
+

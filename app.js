@@ -52,6 +52,7 @@ app.controller('DescController', ['$scope','contactsService', function($scope, c
     $scope.deleteContact = function() {
         var index = $scope.contactsService.contacts.indexOf($scope.contactsService.currentContact);
         $scope.contactsService.contacts.splice(index, 1);
+        $scope.contactsService.currentContact = null; //Hiding the contact that has been deleted
     };
     $scope.isEditing = false;
     $scope.$watch('contactsService.currentContact', function(newVal, oldVal, $scope) {
