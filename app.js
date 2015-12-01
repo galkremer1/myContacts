@@ -10,35 +10,84 @@ app.controller('MainController', ['$scope', function($scope) {
     //})
 }]);
 
-app.controller('ListController', ['$scope','$rootScope', 'myService', function($scope, $rootScope, myService) {
-    $scope.title = 'My list';
+app.controller('ListController', ['$scope','$rootScope', 'contactsService', function($scope, $rootScope, contactsService) {
+    $scope.contactsService = contactsService;
+    $scope.title = 'My Contact List';
     $scope.selectItem = function(selItem) {
         selItem.selected=!selItem.selected;
-        $scope.items.forEach(function(item) {
+        $scope.contactsService.contacts.forEach(function(item) {
             if (item !== selItem) {
                 item.selected = false;
             }
         });
-        myService.cMsg = selItem;
-       // $rootScope.$broadcast('Emitted', selItem);
+        if (selItem.selected) {
+            contactsService.currentContact = selItem;
+        }
+        else {
+            contactsService.currentContact = null;
+        }
     };
-    $scope.items = [{name:'Ball', desc: ' This Ball is huge. it is red and hairy.', pic: 'http://lorempixel.com/200/200/people/?1'},
-                    {name:'Shoe', desc: ' This shoe is huge. it is blue and fluffy.', pic: 'http://lorempixel.com/200/200/people/?2'},
-                    {name:'Bottle', desc: ' This Bottle is small. it is blue and Burb.', pic: 'http://lorempixel.com/200/200/people/?3'},
-                    {name:'Horn', desc: ' This Horn is medium. it is yellow and narf.', pic: 'http://lorempixel.com/200/200/people/?4'},
-                    {name:'Bed', desc: ' This bed is extra large. it is black and soft.', pic: 'http://lorempixel.com/200/200/people/d?5'}]
+    $scope.addNewContact = function() {
+        contactsService.currentContact = null;
+        contactsService.contacts.forEach(function(contact) {
+            contact.selected = false;
+        });
+        contactsService.newContact = {name:'', phoneNumber: ''};
+    };
 }]);
 
-app.controller('DescController', ['$scope','myService', function($scope, myService){
-    $scope.msg = {desc: 'default'};
-    /*$scope.$on('Emitted', function(event, sentObj){
-        $scope.msg = sentObj;
-    })*/
-    $scope.myService = myService;
+app.controller('DescController', ['$scope','contactsService', function($scope, contactsService){
+    $scope.contactsService = contactsService;
+    $scope.editContact = function() {
+        $scope.isEditing = true;
+        $scope.contactsService.editedContact=angular.copy($scope.contactsService.currentContact);
+    };
+    $scope.save= function() {
+        angular.copy($scope.contactsService.editedContact, $scope.contactsService.currentContact);
+        $scope.isEditing = false;
+    };
+    $scope.undo = function() {
+        $scope.isEditing = false;
+    };
+    $scope.deleteContact = function() {
+        var index = $scope.contactsService.contacts.indexOf($scope.contactsService.currentContact);
+        $scope.contactsService.contacts.splice(index, 1);
+    };
+    $scope.isEditing = false;
+    $scope.$watch('contactsService.currentContact', function(newVal, oldVal, $scope) {
+        $scope.isEditing = false;
+    });
 }]);
 
-app.service('myService', function() {
-    return {txt: 'default msg'};
+app.controller('AddController', ['$scope','contactsService', function($scope, contactsService){
+    $scope.contactsService = contactsService;
+
+    $scope.add= function() {
+        $scope.contactsService.contacts.push($scope.contactsService.newContact);
+        $scope.contactsService.newContact = null;
+    };
+    $scope.discard= function() {
+        $scope.contactsService.newContact = null;
+    };
+    $scope.$watch('contactsService.currentContact', function(newVal, oldVal, $scope) {
+        if (newVal) {
+            $scope.contactsService.newContact = null;
+        }
+    });
+}]);
+
+app.service('contactsService', function() {
+    return {
+        filter: '',
+        currentContact: null,
+        editedContact: null,
+        newContact: null,
+        contacts : [{name:'Gal', phoneNumber: '+972543332213', pic: 'http://lorempixel.com/100/100/people/?1'},
+        {name:'David', phoneNumber: '+972541112212', pic: 'http://lorempixel.com/100/100/people/?2'},
+        {name:'Ofir', phoneNumber: '+972545552213', pic: 'http://lorempixel.com/100/100/people/?3'},
+        {name:'Yosi', phoneNumber: '+972543332214', pic: 'http://lorempixel.com/100/100/people/?4'},
+        {name:'Hila', phoneNumber: '+972543332215', pic: 'http://lorempixel.com/100/100/people/d?5'}]
+    };
 });
 
 
