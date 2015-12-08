@@ -83,12 +83,13 @@ app.service('contactsService', function() {
         currentContact: null,
         editedContact: null,
         newContact: null,
-        contacts : [{name:'Gal', phoneNumber: '+972543332213', pic: 'http://lorempixel.com/100/100/people/?1'},
-        {name:'David', phoneNumber: '+972541112212', pic: 'http://lorempixel.com/100/100/people/?2'},
-        {name:'Ofir', phoneNumber: '+972545552213', pic: 'http://lorempixel.com/100/100/people/?3'},
-        {name:'Yosi', phoneNumber: '+972543332214', pic: 'http://lorempixel.com/100/100/people/?4'},
-        {name:'Hila', phoneNumber: '+972543332215', pic: 'http://lorempixel.com/100/100/people/d?5'}]
+        contacts : [{name:'Gal', phoneNumber: '+972543332213', pic: 'http://lorempixel.com/100/100/people/?1', isFavourite: true},
+        {name:'David', phoneNumber: '+972541112212', pic: 'http://lorempixel.com/100/100/people/?2', isFavourite: false},
+        {name:'Ofir', phoneNumber: '+972545552213', pic: 'http://lorempixel.com/100/100/people/?3', isFavourite: true},
+        {name:'Yosi', phoneNumber: '+972543332214', pic: 'http://lorempixel.com/100/100/people/?4', isFavourite: false},
+        {name:'Hila', phoneNumber: '+972543332215', pic: 'http://lorempixel.com/100/100/people/d?5', isFavourite: true}]
     };
 });
+
 
 

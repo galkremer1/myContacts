@@ -1,0 +1,45 @@
+/*.btn {*/
+    /*background-color: red;*/
+    /*color: black;*/
+/*}*/
+.switch-container, .switch-container * {
+    box-sizing: border-box;
+    width: 30px;
+    height: 9px;
+    border-radius: 60px;
+    position: absolute;
+    transition: all 0.3s ease-in 0s;
+    background-color: gray;
+    margin-left: 1%;
+    margin-top: 5px;
+}
+
+.hidden-checkbox {
+    overflow: hidden;
+    position: absolute;
+    left: -9000px;
+}
+
+.switch-on {
+    background-color: #34A7C1; color: #FFFFFF;
+}
+
+.toggle{
+    width: 15px;
+    height: 15px;
+    background-color: #EEEEEE; color: #999999;
+    border-radius: 50%;
+    position: absolute;
+    transition: margin 0.3s ease-in 0s;
+    top:-7px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+.switch-on .toggle {
+    margin-left: 18px;
+    background-color: lightcoral;
+
+}
+
+
+
