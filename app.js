@@ -2,12 +2,10 @@
  * Created by galkremer on 30/11/2015.
  */
 
-var app = angular.module("myApp", []);
+var app = angular.module("myApp", ['ui.router']);
 
 app.controller('MainController', ['$scope', function($scope) {
-    //$scope.$on('Emmited', function(event, sentObj) {
-    //    $scope.$broadcast('Emitted', sentObj);
-    //})
+
 }]);
 
 app.controller('ListController', ['$scope','$rootScope', 'contactsService', function($scope, $rootScope, contactsService) {
@@ -36,27 +34,26 @@ app.controller('ListController', ['$scope','$rootScope', 'contactsService', func
     };
 }]);
 
-app.controller('DescController', ['$scope','contactsService', function($scope, contactsService){
+app.controller('DescController', ['$scope', '$stateParams' , '$state' ,'contactsService', function($scope,  $stateParams, $state, contactsService){
     $scope.contactsService = contactsService;
     $scope.editContact = function() {
         $scope.isEditing = true;
-        $scope.contactsService.editedContact=angular.copy($scope.contactsService.currentContact);
+        $scope.contactsService.editedContact = angular.copy($scope.currentContact);
     };
     $scope.save= function() {
-        angular.copy($scope.contactsService.editedContact, $scope.contactsService.currentContact);
+        angular.copy($scope.contactsService.editedContact,$scope.currentContact);
         $scope.isEditing = false;
     };
     $scope.undo = function() {
         $scope.isEditing = false;
     };
     $scope.deleteContact = function() {
-        var index = $scope.contactsService.contacts.indexOf($scope.contactsService.currentContact);
-        $scope.contactsService.contacts.splice(index, 1);
-        $scope.contactsService.currentContact = null; //Hiding the contact that has been deleted
+        $scope.currentContact.isDeleted = true;
+        $state.go('contactDeleted');
+
     };
-    $scope.isEditing = false;
-    $scope.$watch('contactsService.currentContact', function(newVal, oldVal, $scope) {
-        $scope.isEditing = false;
+    contactsService.getUserById($stateParams.userId).then(function(contact) {
+        $scope.currentContact = contact;
     });
 }]);
 
@@ -64,32 +61,84 @@ app.controller('AddController', ['$scope','contactsService', function($scope, co
     $scope.contactsService = contactsService;
 
     $scope.add= function() {
-        $scope.contactsService.contacts.push($scope.contactsService.newContact);
-        $scope.contactsService.newContact = null;
+        $scope.contactsService.addContact();
     };
-    $scope.discard= function() {
-        $scope.contactsService.newContact = null;
-    };
-    $scope.$watch('contactsService.currentContact', function(newVal, oldVal, $scope) {
-        if (newVal) {
-            $scope.contactsService.newContact = null;
-        }
-    });
 }]);
 
-app.service('contactsService', function() {
-    return {
+app.service('contactsService', ['$state', '$http', function($state, $http) {
+    var service =  {
         filter: '',
         currentContact: null,
         editedContact: null,
         newContact: null,
-        contacts : [{name:'Gal', phoneNumber: '+972543332213', pic: 'http://lorempixel.com/100/100/people/?1', isFavourite: true},
-        {name:'David', phoneNumber: '+972541112212', pic: 'http://lorempixel.com/100/100/people/?2', isFavourite: false},
-        {name:'Ofir', phoneNumber: '+972545552213', pic: 'http://lorempixel.com/100/100/people/?3', isFavourite: true},
-        {name:'Yosi', phoneNumber: '+972543332214', pic: 'http://lorempixel.com/100/100/people/?4', isFavourite: false},
-        {name:'Hila', phoneNumber: '+972543332215', pic: 'http://lorempixel.com/100/100/people/d?5', isFavourite: true}]
+        contacts : [{name:'Gal', phoneNumber: '+972543332213', pic: 'http://lorempixel.com/100/100/people/?1', isFavourite: true, isDeleted: false, id: "dEm89iLo2J"},
+        {name:'David', phoneNumber: '+972541112212', pic: 'http://lorempixel.com/100/100/people/?2', isFavourite: false, isDeleted: false, id: "dAm89iLo2J"},
+        {name:'Ofir', phoneNumber: '+972545552213', pic: 'http://lorempixel.com/100/100/people/?3', isFavourite: true, isDeleted: false, id: "dVm89iLo2J"},
+        {name:'Yosi', phoneNumber: '+972543332214', pic: 'http://lorempixel.com/100/100/people/?4', isFavourite: false, isDeleted: false, id: "ZEm89iLo2J"},
+        {name:'Hila', phoneNumber: '+972543332215', pic: 'http://lorempixel.com/100/100/people/d?5', isFavourite: true, isDeleted: false, id: "aEm89iLo2J"}]
     };
-});
+    service.getUserById = function(id) {
+        var promise = $http.get('http://jsonplaceholder.typicode.com/users/9');
+         return promise.then(function(res) {
+             return service.contacts.filter(function(contact) {
+                 return (contact.id === id);
+             })[0];
+        });
+    };
+    service.generateId = function() {
+        var id = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
+        for( var i=0; i < 10; i++ )
+            id += possible.charAt(Math.floor(Math.random() * possible.length));
+        return id;
+    };
+    service.addContact = function() {
+        service.newContact.id = service.generateId();
+        service.newContact.isDeleted = false;
+        service.contacts.push(service.newContact);
+        $state.go('contact', {userId: service.newContact.id});
+        service.newContact = null;
+    };
+
+    return service;
+}]);
+
+app.config(function($stateProvider, $urlRouterProvider) {
+    //
+    // For any unmatched url, redirect to /state1
+    $urlRouterProvider.otherwise("/contacts");
+    //
+    // Now set up the states
+    $stateProvider
+        .state('contact', {
+            url: "/contact/{userId}",
+            templateUrl: "contact.html",
+            controller: 'DescController'
+        //    resolve:{
+        //        curCon: service.getUserById = function(id) {
+        //            var promise = $http.get('http://jsonplaceholder.typicode.com/users/9');
+        //            return promise.then(function(res) {
+        //                return service.contacts.filter(function(contact) {
+        //                    return (contact.id === id);
+        //                })[0];
+        //            });
+        //        };
+        //    }
+        })
+        .state('addContact', {
+            url: "/addContact",
+            templateUrl: "add-contact.html",
+            controller: 'AddController'
+        })
+        .state('contactDeleted', {
+            url: "/Contacts",
+            template: "Contact Deleted"
+        })
+        .state('contacts', {
+            url: "/contacts",
+            template: "Welcome to heaven"
+        });
+});
 
 

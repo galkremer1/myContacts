@@ -1,0 +1,20 @@
+<div>
+    <div >
+        <label>Name:</label>
+        <input ng-model="contactsService.newContact.name"/>
+    </div>
+    <div>
+        <label>Number:</label>
+        <input ng-model="contactsService.newContact.phoneNumber"/>
+    </div>
+                <span ng-controller="switchController">
+                    <label>Favourite: </label>
+                        <my-switch switch-value="contactsService.newContact.isFavourite">
+                        </my-switch>
+                </span>
+    <br>
+    <div class="buttons">
+        <button ng-click="add()">Add</button>
+        <button ng-click="discard()">discard</button>
+    </div>
+</div>

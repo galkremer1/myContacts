@@ -14,70 +14,20 @@
                     <input ng-model="contactsService.filter"/>
                 </div>
                 <div>
-                    <button class="btn" ng-click="addNewContact()">Add a new contact</button>
+                    <button class="btn" ui-sref="addContact">Add a new contact</button>
                 </div>
-                <div ng-repeat="contact in contactsService.contacts | orderBy:'name' | filter:contactsService.filter">
-                   <button class="btn" ng-click="selectItem(contact)" ng-style={"background":contact.selected?"red":"white"}> {{contact.name}} </button>
+                <div ng-repeat="contact in contactsService.contacts | filter:contactsService.filter | filter: {isDeleted: false} | orderBy:'name'">
+                   <button class="btn" ui-sref="contact({userId:contact.id})" ng-style={"background":contact.selected?"red":"white"}> {{contact.name}} </button>
                </div>
             </div>
     </span>
     <span class="displayRapper">
-            <div ng-controller="DescController" ng-show="contactsService.currentContact">
-                <div>
-                    <img ng-src={{contactsService.currentContact.pic}}>
-                </div>
-                <div >
-                    <label>Name:</label>
-                    <span ng-hide="isEditing">{{contactsService.currentContact.name}} </span>
-                    <input ng-show="isEditing" ng-model="contactsService.editedContact.name"/>
-                </div>
-                <div>
-                    <label>Number:</label>
-                    <span ng-hide="isEditing">{{contactsService.currentContact.phoneNumber}}</span>
-                    <input ng-show="isEditing" ng-model="contactsService.editedContact.phoneNumber"/>
-                </div>
-                <div>
-                    <label>Favourite:</label>
-                    <span ng-hide="isEditing">
-                        <my-switch switch-value="contactsService.currentContact.isFavourite">
-                        </my-switch>
-                    </span>
-                    <span ng-show="isEditing">
-                        <my-switch switch-value="contactsService.editedContact.isFavourite">
-                        </my-switch>
-                    </span>
-                </div>
-                <div class="buttons">
-                    <button ng-hide="isEditing" ng-click="editContact()">Edit Contact</button>
-                    <button ng-hide="isEditing" ng-click="deleteContact()">Delete Contact</button>
-                    <button ng-show="isEditing" ng-click="save()">Save</button>
-                    <button ng-show="isEditing" ng-click="undo()">Undo</button>
-                </div>
-            </div>
-            <div ng-controller="AddController" ng-show="contactsService.newContact">
-                <div >
-                    <label>Name:</label>
-                    <input ng-model="contactsService.newContact.name"/>
-                </div>
-                <div>
-                    <label>Number:</label>
-                    <input ng-model="contactsService.newContact.phoneNumber"/>
-                </div>
-                <span ng-controller="switchController">
-                        <my-switch switch-value="contactsService.newContact.isFavourite">
-                        </my-switch>
-                </span>
-                <br>
-                <div class="buttons">
-                    <button ng-click="add()">Add</button>
-                    <button ng-click="discard()">discard</button>
-                </div>
-            </div>
-
+            <div ui-view></div>
     </span>
 </div>
 
 <script src="angular/angular.js"></script>
+<script src="angular-ui-router.js"></script>
 <script src="app.js"></script>
 <script src="directives.js"></script>
 </body>

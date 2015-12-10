@@ -1,0 +1,33 @@
+<div>
+    <div>
+        <img ng-src={{currentContact.pic}}>
+    </div>
+    <div >
+        <label>Name:</label>
+        <span ng-hide="isEditing">{{currentContact.name}} </span>
+        <input ng-show="isEditing" ng-model="contactsService.editedContact.name"/>
+
+    </div>
+    <div>
+        <label>Number:</label>
+        <span ng-hide="isEditing">{{currentContact.phoneNumber}}</span>
+        <input ng-show="isEditing" ng-model="contactsService.editedContact.phoneNumber"/>
+    </div>
+    <div>
+        <label>Favourite:</label>
+        <span ng-hide="isEditing">
+            <my-switch switch-value="currentContact.isFavourite">
+            </my-switch>
+        </span>
+        <span ng-show="isEditing">
+            <my-switch switch-value="contactsService.editedContact.isFavourite">
+            </my-switch>
+        </span>
+    </div>
+    <div class="buttons">
+        <button ng-hide="isEditing" ng-click="editContact()">Edit Contact</button>
+        <button ng-hide="isEditing" ng-click="deleteContact()">Delete Contact</button>
+        <button ng-show="isEditing" ng-click="save()">Save</button>
+        <button ng-show="isEditing" ng-click="undo()">Undo</button>
+    </div>
+</div>
